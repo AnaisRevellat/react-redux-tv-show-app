@@ -1,24 +1,43 @@
+import React, { useState, useEffect } from "react";
+import { TVShowAPI } from "./api/tv-show";
+import { TVShowDetail } from "./components/TVShowDetail/TVShowDetail";
+import { BACKDROP_BASE_URL } from "./config";
 import "./global.css";
-import s from './style.module.css';
+import s from "./style.module.css";
 
+export function App() {	
+	const [currentTVShow, setCurrentTVShow] = useState();
 
-export function App(){
-  return( 
-  <div className={s.main_container}>
-    <div className="row">
-      <div className="col-4">
-        <div>Logo</div>
-        <div>Subtitle</div>
-      </div>
-      <div className="col-sd-12 col-md-4">
-        <input style={{width:'100%'}} type="text"/>
-      </div>
+	async function fetchPopulars(){
+		const populars = await TVShowAPI.fetchPopulars();
 
-    </div>
+		if(populars.length > 0) {			
+			setCurrentTVShow(populars[0])
+		}
+	}
+	useEffect(()=>{
+		fetchPopulars();
+	}, []);
 
-    <div className={s.header}>Header</div>
-    <div className={s.tv_show_detail}>Detail</div>
-    <div className={s.recommendations}>Recommendations</div>
-  </div>
-  )
+	console.log("***",currentTVShow)
+
+	return (
+		<div className={s.main_container} style={{background: currentTVShow ? `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url("${BACKDROP_BASE_URL}${currentTVShow.backdrop_path}") no-repeat center / cover` : "black"}}>
+
+<div className={s.header}>
+			<div className='row'>
+				<div className='col-4'>
+					<div>Logo here</div>
+					<div>Subtitle</div>
+				</div>
+				<div className='col-md-12 col-lg-4'>
+					<input style={{ width: "100%" }} type='text' />
+				</div>
+			</div>
+	</div>
+
+			<div className={s.tv_show_detail}><TVShowDetail tvShow={currentTVShow}/></div>
+			<div className={s.recommended_shows}>Recommended tv shows</div>
+		</div>
+	);
 }
