@@ -36,7 +36,9 @@ export function App() {
 			</div>
 	</div>
 
-			<div className={s.tv_show_detail}><TVShowDetail tvShow={currentTVShow}/></div>
+			<div className={s.tv_show_detail}>
+				{currentTVShow ? <TVShowDetail tvShow={currentTVShow}/> : 'no description available'}
+			</div>
 			<div className={s.recommended_shows}>Recommended tv shows</div>
 		</div>
 	);
